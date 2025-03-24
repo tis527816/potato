@@ -1,0 +1,67 @@
+[gd_scene load_steps=9 format=3 uid="uid://bm5e5qineoskm"]
+
+[ext_resource type="Script" uid="uid://36m30c4jvgg8" path="res://bullet/bullet.gd" id="1_6wip1"]
+[ext_resource type="Texture2D" uid="uid://qh362mx5hkcx" path="res://bullet/All_Fire_Bullet_Pixel_16x16_00.png" id="1_k2aps"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6wip1"]
+atlas = ExtResource("1_k2aps")
+region = Rect2(224, 208, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0qjqd"]
+atlas = ExtResource("1_k2aps")
+region = Rect2(208, 208, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xvnxm"]
+atlas = ExtResource("1_k2aps")
+region = Rect2(192, 208, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ynyjt"]
+atlas = ExtResource("1_k2aps")
+region = Rect2(176, 208, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3udht"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6wip1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0qjqd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xvnxm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ynyjt")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_k2aps"]
+radius = 4.0
+
+[node name="bullet" type="CharacterBody2D"]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_6wip1")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_3udht")
+autoplay = "default"
+frame_progress = 0.153719
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D"]
+z_index = 9
+shape = SubResource("CircleShape2D_k2aps")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 18
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+z_index = 9
+shape = SubResource("CircleShape2D_k2aps")
+
+[connection signal="body_shape_entered" from="Area2D" to="." method="_on_area_2d_body_shape_entered"]

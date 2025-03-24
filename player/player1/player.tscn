@@ -1,0 +1,98 @@
+[gd_scene load_steps=11 format=3 uid="uid://ctd5ueq427mgu"]
+
+[ext_resource type="Script" uid="uid://b8mnysusx73jt" path="res://player/player1/player.gd" id="1_4g2d2"]
+[ext_resource type="Texture2D" uid="uid://ci36qpacw5l3r" path="res://player/player1/player1-sheet.png" id="1_d4n1f"]
+[ext_resource type="PackedScene" uid="uid://xbh5asyuyeui" path="res://weapon/now_weapons.tscn" id="2_0o2vo"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4g2d2"]
+atlas = ExtResource("1_d4n1f")
+region = Rect2(0, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0o2vo"]
+atlas = ExtResource("1_d4n1f")
+region = Rect2(240, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s1unr"]
+atlas = ExtResource("1_d4n1f")
+region = Rect2(480, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dppda"]
+atlas = ExtResource("1_d4n1f")
+region = Rect2(720, 0, 240, 240)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wtmb0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4g2d2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0o2vo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s1unr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dppda")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d4n1f"]
+size = Vector2(41.6667, 51.6667)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0o2vo"]
+radius = 260.005
+
+[node name="player" type="CharacterBody2D" groups=["player"]]
+z_index = 4
+scale = Vector2(0.6, 0.6)
+collision_mask = 5
+script = ExtResource("1_4g2d2")
+metadata/_edit_group_ = true
+
+[node name="now_weapons" parent="." instance=ExtResource("2_0o2vo")]
+visible = false
+
+[node name="sprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.25, 0.25)
+sprite_frames = SubResource("SpriteFrames_wtmb0")
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.779523
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+light_mask = 2
+visibility_layer = 2
+position = Vector2(0.833334, 5.83333)
+shape = SubResource("RectangleShape2D_d4n1f")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(1.5, 1.5)
+position_smoothing_enabled = true
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+
+[node name="stop" type="Area2D" parent="."]
+visible = false
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="stop"]
+position = Vector2(0.833333, 2.5)
+shape = SubResource("RectangleShape2D_d4n1f")
+
+[node name="drop_item_area" type="Area2D" parent="."]
+visible = false
+collision_layer = 0
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="drop_item_area"]
+shape = SubResource("CircleShape2D_0o2vo")
+debug_color = Color(0.683, 0.502, 0.036, 0.762)
+
+[connection signal="body_entered" from="stop" to="." method="_on_stop_body_entered"]
+[connection signal="mouse_entered" from="stop" to="." method="_on_stop_mouse_entered"]
+[connection signal="mouse_exited" from="stop" to="." method="_on_stop_mouse_exited"]
+[connection signal="body_entered" from="drop_item_area" to="." method="_on_drop_item_area_body_entered"]
